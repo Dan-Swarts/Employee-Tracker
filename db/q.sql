@@ -15,6 +15,12 @@
 --     LEFT JOIN employees managers ON main.manager_id = managers.id
 -- ;
 
-SELECT departments.department_name
-    FROM departments
-;
+-- SELECT departments.department_name
+--     FROM departments
+-- ;
+
+UPDATE employees 
+SET role_id = 10
+WHERE id = 5;
+
+SELECT * FROM employees;

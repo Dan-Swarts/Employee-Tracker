@@ -98,7 +98,6 @@ const addEmployee = async () => {
     });
 
 
-
     let response = await inquirer.prompt([{
         name: 'first_name',
         message: "What is the employee's first name?",
@@ -128,7 +127,38 @@ const addEmployee = async () => {
 };
 
 const updateEmployeeRole = async () => {
-    
+    const employees_query = await getAllEmployees();
+    const roles_query = await getAllRoles();
+
+    const employees_array = employees_query.rows.map((employee_object) => {
+        const name = `${employee_object.first_name} ${employee_object.last_name}`;
+        return { name: name, value: employee_object.id };
+    });
+
+    const roles_array = roles_query.rows.map((role_object) => {
+        return { name: role_object.title, value: role_object.id };
+    });
+
+    const response = await inquirer.prompt([{
+        name: 'employee',
+        message: 'Which employee do you want to change the role of?',
+        type: 'list',
+        choices: employees_array
+    },
+    {
+        name: 'role',
+        message: 'Which role do you want to assign them?',
+        type: 'list',
+        choices: roles_array
+    }]);
+
+    const sql = `
+        UPDATE employees
+        SET role_id = $1
+        WHERE id = $2
+    ;`;
+    const params = [response.role,response.employee];
+    await pool.query(sql,params);
 };
 
 const getAllRoles = async () => {
