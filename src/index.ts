@@ -39,8 +39,7 @@ const promptUser = async () => {
             return;
 
         case 'View All Roles':
-            let roles = await getAllRoles();
-            console.table(roles.rows);
+            await viewAllRoles();
             promptUser();
             return;
 
@@ -50,8 +49,7 @@ const promptUser = async () => {
             return;
 
         case 'View All Departments':
-            let departments = await getAllDepartments();
-            console.table(departments.rows);
+            await viewAllDepartments();
             promptUser();
             return;
 
@@ -130,7 +128,7 @@ const addEmployee = async () => {
 };
 
 const updateEmployeeRole = async () => {
-
+    
 };
 
 const getAllRoles = async () => {
@@ -139,18 +137,66 @@ const getAllRoles = async () => {
     return answer;
 };
 
-const addRole = async () => {
+const viewAllRoles = async () => {
+    const sql = `SELECT roles.title, roles.salary, departments.department_name
+        FROM roles JOIN departments ON roles.department_id = departments.id
+    ;`
 
+    let answer = await pool.query(sql);
+    console.table(answer.rows);
+}
+
+const addRole = async () => {
+    const departments_query = await getAllDepartments();
+
+    const departments_array = departments_query.rows.map((department_object) => {
+        return { name: department_object.department_name, value: department_object.id}
+    });
+
+    let response = await inquirer.prompt([{
+        name: 'title',
+        message: 'What is this role called?',
+        type: 'input'
+    },  
+    {
+        name: 'salary',
+        message: "What is this role's salary?",
+        type: 'number'
+    }, 
+    {
+        name: 'department',
+        message: 'What department is this role in?',
+        type: 'list',
+        choices: departments_array
+    }]);
+
+    const sql = `INSERT INTO roles (title,salary,department_id) VALUES ($1,$2,$3);`
+    const params = [response.title,response.salary,response.department];
+    await pool.query(sql,params);
 };
 
 const getAllDepartments = async () => {
-    const sql = `SELECT * FROM DEPARTMENTS`;
+    const sql = `SELECT * FROM departments`;
     let answer = await pool.query(sql);
     return answer;
 };
 
-const addDepartment = async () => {
+const viewAllDepartments = async () => {
+    const sql = `SELECT departments.department_name FROM departments`;
+    let answer = await pool.query(sql);
+    console.table(answer.rows);
+};
 
+const addDepartment = async () => {
+    const response = await inquirer.prompt([{
+        name: 'department_name',
+        message: `What is the new department's name?`,
+        type: 'input'
+    }]);
+
+    const sql = "INSERT INTO departments (department_name) VALUES ($1);"
+    const params = [response.department_name];
+    await pool.query(sql,params);
 };
 
 promptUser();
