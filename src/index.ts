@@ -1,7 +1,6 @@
 import inquirer from "inquirer";
-// import { QueryResult } from "pg";
 import { pool, connectToDb } from './connection.js';
-// import { Employee } from "./employee.js";
+import figlet from 'figlet';
 
 await connectToDb();
 
@@ -232,4 +231,7 @@ const addDepartment = async () => {
     await pool.query(sql,params);
 };
 
+
+let figletText = await figlet.text('Employee Tracker');
+console.log(figletText);
 promptUser();
