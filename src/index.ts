@@ -131,13 +131,16 @@ const updateEmployeeRole = async () => {
     const roles_query = await getAllRoles();
 
     const employees_array = employees_query.rows.map((employee_object) => {
-        const name = `${employee_object.first_name} ${employee_object.last_name}`;
+        let name = `${employee_object.first_name} ${employee_object.last_name}`;
         return { name: name, value: employee_object.id };
     });
 
     const roles_array = roles_query.rows.map((role_object) => {
         return { name: role_object.title, value: role_object.id };
     });
+
+    console.log(employees_array);
+    console.log(roles_array);
 
     const response = await inquirer.prompt([{
         name: 'employee',
