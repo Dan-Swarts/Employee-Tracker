@@ -9,12 +9,8 @@ Lets you track and update employee info using a Postgres database.
 ## 📁 Table of Contents
 
 - [Installation](#installation)
-- [Usage](#usage)
-- [Features](#features)
-- [Tests](#tests)
-- [Credits](#credits)
+- [Questions](#questions)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Installation
 
@@ -61,20 +57,6 @@ npm run build
 # Run the program:
 npm run start
 ```
-
-## Usage
-
-- step 1
-
-![Add a screenshot](./relative/path/to/img.jpg?raw=true)
-
-- step 2
-
-![Add a screenshot](./relative/path/to/img.jpg?raw=true)
-
-- step 3
-
-![Add a screenshot](./relative/path/to/img.jpg?raw=true)
 
 ## Questions
 
